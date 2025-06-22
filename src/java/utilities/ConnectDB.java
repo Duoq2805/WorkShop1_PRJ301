@@ -16,11 +16,11 @@ public class ConnectDB {
 
     public ConnectDB() {
         this.hostName = "127.0.0.1";
-        this.instance = "BODUA_GROUP\\ABODUAGROUP"; // 
+        this.instance = "";
         this.port = "1433";
-        this.dbName = "ProductIntro"; // Khớp với SQL
-        this.user = "sa"; // Thay bằng user thật nếu cần
-        this.pass = "12345"; // Thử pass, nếu sai, dùng pass của tài khoản cụ thể
+        this.dbName = "ProductIntro";
+        this.user = "sa";
+        this.pass = "12345";
     }
 
     public ConnectDB(ServletContext sc) {
@@ -33,15 +33,13 @@ public class ConnectDB {
     }
 
     public String getURLString() {
-        return String.format("jdbc:sqlserver://%s\\%s:%s;databaseName=%s;user=%s;password=%s;encrypt=true;trustServerCertificate=true",
-                this.hostName, this.instance.trim(), this.port, this.dbName, this.user, this.pass);
+        String fm = "jdbc:sqlserver://%s:%s;databaseName=%s;user=%s;password=%s;";
+        return String.format(fm, hostName, port, dbName, user, pass);
     }
 
     public Connection getConnection() throws ClassNotFoundException, SQLException {
-        System.out.println("Thử kết nối tới: " + getURLString());
         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        Connection conn = DriverManager.getConnection(getURLString(), user, pass);
-        System.out.println("Kết nối thành công!");
-        return conn;
+        return DriverManager.getConnection(getURLString());
     }
 }
+

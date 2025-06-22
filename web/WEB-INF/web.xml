@@ -4,28 +4,20 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
-    <context-param>
-        <param-name>hostAddress</param-name>
-        <param-value>127.0.0.1</param-value>
-    </context-param>
-    <context-param>
-        <param-name>instance</param-name>
-        <param-value>BODUA_GROUP\ABODUAGROUP</param-value>
-    </context-param>
-    <context-param>
-        <param-name>dbName</param-name>
-        <param-value>ProductIntro</param-value>
-    </context-param>
-    <context-param>
-        <param-name>dbPort</param-name>
-        <param-value>1433</param-value>
-    </context-param>
-    <context-param>
-        <param-name>userName</param-name>
-        <param-value>sa</param-value>
-    </context-param>
-    <context-param>
-        <param-name>userPass</param-name>
-        <param-value>12345</param-value>
-    </context-param>
+    <servlet>
+        <servlet-name>index</servlet-name>
+        <servlet-class>index</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>index</servlet-name>
+        <url-pattern>/index</url-pattern>
+    </servlet-mapping>
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
 </web-app>
