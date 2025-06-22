@@ -38,8 +38,10 @@ public class ConnectDB {
     }
 
     public Connection getConnection() throws ClassNotFoundException, SQLException {
+        System.out.println("Thử kết nối tới: " + getURLString());
         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        return DriverManager.getConnection(getURLString());
+        Connection conn = DriverManager.getConnection(getURLString(), user, pass);
+        System.out.println("Kết nối thành công: " + conn);
+        return conn;
     }
 }
-

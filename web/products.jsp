@@ -6,43 +6,58 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="model.dao.ProductDAO, model.Product, java.util.List" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%
+    ProductDAO dao = new ProductDAO();
+    List<Product> products = dao.listAll();
+    request.setAttribute("products", products);
+%>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="UTF-8">
         <title>Danh sách sản phẩm</title>
-        <!-- Latest compiled and minified CSS -->
+
+        <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
-        <!-- jQuery library -->
+        <!-- jQuery + Bootstrap JS -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-
-        <!-- Latest compiled JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="css/products.css">
     </head>
-    <body class="container">
-        <h1 class="mt-5">Danh sách sản phẩm</h1>
+    <body class="container mt-5">
+        <h1 class="text-center">Danh sách sản phẩm</h1>
         <div class="row">
-            <c:forEach var="p" items="${productDAO.listAll}">
-                <c:set var="discountedPrice" value="${p.price != null && p.discount != null ? p.price * (1 - p.discount / 100.0) : 0}"/>
-                <div class="col-md-4 mb-3">
-                    <div class="card">
-                        <img src="${p.productImage}" class="card-img-top" alt="${p.productName}">
-                        <div class="card-body">
-                            <h5 class="card-title">${p.productName}</h5>
-                            <c:choose>
-                                <c:when test="${p.brief != null and not empty p.brief}">
-                                    <p class="card-text">${p.brief.length() > 100 ? p.brief.substring(0, 100) + '...' : p.brief}</p>
-                                </c:when>
-                                <c:otherwise>
-                                    <p class="card-text">Không có mô tả</p>
-                                </c:otherwise>
-                            </c:choose>
-                            <p class="card-text">Giá: <fmt:formatNumber value="${discountedPrice}" type="number"/> VNĐ (Giảm ${p.discount != null ? p.discount : 0}%)</p>
-                            <a href="product-detail.jsp?id=${p.productId}" class="btn btn-primary">Xem chi tiết</a>
+            <c:forEach var="p" items="${products}">
+                <div class="col-sm-6 col-md-4 mb-4">
+                    <div class="product-card">
+                        <c:set var="img" value="${fn:replace(p.productImage, '.pnj', '.png')}" />
+                        <img src="${pageContext.request.contextPath}${img}" class="product-image" alt="${p.productName}">
+                        <div class="product-body">
+                            <h5 class="product-title">${p.productName}</h5>
+                            <p class="product-brief">
+                                <c:choose>
+                                    <c:when test="${p.brief != null and not empty p.brief}">
+                                        ${fn:substring(p.brief, 0, 100)}...
+                                    </c:when>
+                                    <c:otherwise>
+                                        Không có mô tả
+                                    </c:otherwise>
+                                </c:choose>
+                            </p>
+                            <p class="product-price">
+                                <fmt:formatNumber value="${p.price - (p.price * p.discount / 100)}" type="number"/> VNĐ
+                                <span class="text-muted small"> (Giảm ${p.discount}%)</span>
+                            </p>
+                            <a href="product-detail.jsp?id=${p.productId}" class="btn btn-primary btn-block">Xem chi tiết</a>
                         </div>
                     </div>
                 </div>
             </c:forEach>
+        </div>
     </body>
 </html>
+

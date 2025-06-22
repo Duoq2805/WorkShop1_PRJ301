@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductDAO implements Accessible<Product> {
+
     private ServletContext sc;
     private Connection conn;
 
@@ -29,7 +30,7 @@ public class ProductDAO implements Accessible<Product> {
     @Override
     public int insertRec(Product o) {
         String sql = "INSERT INTO products (productId, productName, productImage, brief, postedDate, typeId, account, unit, price, discount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, o.getProductId());
             ps.setString(2, o.getProductName());
             ps.setString(3, o.getProductImage());
@@ -50,7 +51,7 @@ public class ProductDAO implements Accessible<Product> {
     @Override
     public int updateRec(Product o) {
         String sql = "UPDATE products SET productName = ?, productImage = ?, brief = ?, postedDate = ?, typeId = ?, account = ?, unit = ?, price = ?, discount = ? WHERE productId = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, o.getProductName());
             ps.setString(2, o.getProductImage());
             ps.setString(3, o.getBrief());
@@ -71,7 +72,7 @@ public class ProductDAO implements Accessible<Product> {
     @Override
     public int deleteRec(Product o) {
         String sql = "DELETE FROM products WHERE productId = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, o.getProductId());
             return ps.executeUpdate();
         } catch (SQLException e) {
@@ -84,16 +85,16 @@ public class ProductDAO implements Accessible<Product> {
     public List<Product> listAll() {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT * FROM products";
-        try (PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+        try ( PreparedStatement ps = conn.prepareStatement(sql);  ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 Product p = new Product(rs.getString("productId"), rs.getString("productName"),
-                        rs.getString("productImage"), rs.getString("brief"),
-                        rs.getDate("postedDate"), rs.getInt("typeId"),
-                        rs.getString("account"), rs.getString("unit"),
+                        rs.getString("productImage"), rs.getString("brief"), rs.getDate("postedDate"),
+                        rs.getInt("typeId"), rs.getString("account"), rs.getString("unit"),
                         rs.getInt("price"), rs.getInt("discount"));
+                System.out.println("Debug: productId=" + p.getProductId() + ", brief=" + p.getBrief());
                 list.add(p);
             }
+            System.out.println("Số sản phẩm: " + list.size());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -103,7 +104,7 @@ public class ProductDAO implements Accessible<Product> {
     @Override
     public Product getObjectById(String id) {
         String sql = "SELECT * FROM products WHERE productId = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {

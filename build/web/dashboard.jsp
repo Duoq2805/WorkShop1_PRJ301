@@ -25,7 +25,7 @@
         <c:redirect url="login.jsp"/>
     </c:if>
     <h1 class="mt-5">Dashboard Admin</h1>
-    <p>Xin chào, ${user.firstName} ${user.lastName}</p>
+    <p>Xin chào, ${user.firstName} ${user.lastName} (Debug: ${user != null ? 'Logged in' : 'Not logged'})</p>
     <a href="add-account.jsp" class="btn btn-primary m-2">Thêm tài khoản</a>
     <a href="categories.jsp" class="btn btn-primary m-2">Quản lý danh mục</a>
     <a href="products-manage.jsp" class="btn btn-primary m-2">Quản lý sản phẩm</a>
