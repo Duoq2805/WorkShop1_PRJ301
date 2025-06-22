@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectDB {
+
     private String hostName;
     private String instance;
     private String port;
@@ -15,7 +16,7 @@ public class ConnectDB {
 
     public ConnectDB() {
         this.hostName = "127.0.0.1";
-        this.instance = ""; // Instance mặc định
+        this.instance = "BODUA_GROUP\\ABODUAGROUP"; // 
         this.port = "1433";
         this.dbName = "ProductIntro"; // Khớp với SQL
         this.user = "sa"; // Thay bằng user thật nếu cần
@@ -32,8 +33,8 @@ public class ConnectDB {
     }
 
     public String getURLString() {
-        return String.format("jdbc:sqlserver://%s:%s;databaseName=%s;encrypt=false",
-                hostName, port, dbName);
+        return String.format("jdbc:sqlserver://%s\\%s:%s;databaseName=%s;user=%s;password=%s;encrypt=true;trustServerCertificate=true",
+                this.hostName, this.instance.trim(), this.port, this.dbName, this.user, this.pass);
     }
 
     public Connection getConnection() throws ClassNotFoundException, SQLException {
